@@ -8,7 +8,7 @@ TODO: rename classes as base or baseclasses?
 import numpy as np
 import matplotlib.pyplot as plt
 
-from .tools import build_particle_families
+from .tools import build_particle_families, function_timer
 from .calculate import calculate_nodal_forces, calculate_node_damage, smooth_step_data
 
 
@@ -135,6 +135,7 @@ class ParticleSet:
     def add_constant():
         pass
 
+    @function_timer
     def _build_particle_families(self):
         """
         Build particle families

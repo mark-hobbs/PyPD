@@ -19,6 +19,31 @@ import numpy as np
 
 import pypd
 
+def d2xy(n, d):
+    t = d
+    x = y = 0
+    s = 1
+    while s < n:
+        rx = 1 & int(t.real)  # Extract the real part as an integer
+        ry = 1 & int(t.imag)  # Extract the imaginary part as an integer
+        x, y = rot(s, x, y, rx, ry)
+        x += s * rx
+        y += s * ry
+        t = t / 4  # Use complex division
+        s *= 2
+    return int(x), int(y)
+
+def rot(n, x, y, rx, ry):
+    if ry == 0:
+        if rx == 1:
+            x = n - 1 - x
+            y = n - 1 - y
+        x, y = y, x
+    return x, y
+
+def compute_order(points):
+    return np.log(np.sqrt(len(points))) / np.log(2)
+
 
 def build_particle_coordinates(dx, n_div_x, n_div_y):
     """
@@ -155,13 +180,20 @@ def rebuild_node_families(n_nodes, bondlist):
 
 
 def main():
-    dx = 1e-3
+    dx = 0.5e-3
     n_div_x = np.rint(0.4 / dx).astype(int)
     n_div_y = np.rint(0.2 / dx).astype(int)
     notch = [np.array([0 - dx, 0.1 - (dx / 2)]), 
              np.array([0.2, 0.1 - (dx / 2)])]
 
     x = build_particle_coordinates(dx, n_div_x, n_div_y)
+
+    order = compute_order(x)
+    def map_to_hilbert(point):
+        return d2xy(2**order, point[0] + point[1] * 1j)
+
+    x_sorted = np.array(sorted(x, key=map_to_hilbert))
+
     flag, unit_vector = build_boundary_conditions(x, dx)
 
     material = pypd.Material(

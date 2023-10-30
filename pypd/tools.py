@@ -1,10 +1,22 @@
+
+import time
+
 import numpy as np
 import sklearn.neighbors as neighbors
 
-# TODO: should this be a class (Particles)?
-
+def function_timer(func):
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        execution_time = time.time() - start
+        print(f"{func.__name__} took {execution_time:.2f} seconds to execute")
+        return result
+    return wrapper
 
 def build_particle_coordinates(dx, n_div_x, n_div_y, n_div_z):
+    """
+    TODO: delete this function
+    """
     particle_coordinates = np.zeros([n_div_x * n_div_y * n_div_z, 3])
     counter = 0
 

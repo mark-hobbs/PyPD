@@ -5,7 +5,7 @@ Bond array class
 
 import numpy as np
 
-from .tools import build_bond_list
+from .tools import build_bond_list, function_timer
 
 
 # Bonds, BondArray, or BondSet?
@@ -90,6 +90,7 @@ class BondSet:
         # Constitutive model (material_model / material_law?)
         self.constitutive_law = constitutive_law
 
+    @function_timer
     def _build_bond_list(self, nlist):
         """
         Build bond list
