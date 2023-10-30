@@ -1,8 +1,8 @@
-
 import time
 
 import numpy as np
 import sklearn.neighbors as neighbors
+
 
 def function_timer(func):
     def wrapper(*args, **kwargs):
@@ -11,7 +11,9 @@ def function_timer(func):
         execution_time = time.time() - start
         print(f"{func.__name__} took {execution_time:.2f} seconds to execute")
         return result
+
     return wrapper
+
 
 def build_particle_coordinates(dx, n_div_x, n_div_y, n_div_z):
     """
@@ -84,9 +86,7 @@ def build_bond_list(nlist):
     bondlist = [
         [i, j] for i, neighbours in enumerate(nlist) for j in neighbours if i < j
     ]
-    bondlist = np.array(bondlist, dtype=np.intc)
-
-    return bondlist
+    return np.array(bondlist, dtype=np.intc)
 
 
 def build_penetrator():
@@ -170,6 +170,6 @@ def calculate_stable_time_step(rho, dx, horizon, c):
     peridynamic model of solid mechanics. Computers & structures, 83(17-18),
     1526-1535.
 
-    TODO: is this equation correct and is it valid for 2D and 3D problems? 
+    TODO: is this equation correct and is it valid for 2D and 3D problems?
     """
     return np.sqrt((2 * rho * dx) / (np.pi * horizon**2 * dx * c))

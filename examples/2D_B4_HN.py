@@ -184,7 +184,9 @@ def main():
         name="quasi-brittle", E=37e9, Gf=143.2, density=2346, ft=3.9e6
     )
     integrator = pypd.EulerCromer()
-    bc = pypd.BoundaryConditions(flag, unit_vector, magnitude=0)  # TODO: boundary conditions are not required as this example uses a contact model
+    bc = pypd.BoundaryConditions(
+        flag, unit_vector, magnitude=0
+    )  # TODO: boundary conditions are not required as this example uses a contact model
     particles = pypd.ParticleSet(x, dx, bc, material)
     linear = pypd.Linear(material, particles, t=dx)
     trilinear = pypd.Trilinear(material, particles, t=dx)

@@ -139,15 +139,10 @@ def main():
     linear = pypd.Linear(material, particles, t=dx)
     bonds = pypd.BondSet(particles, linear)
     simulation = pypd.Simulation(dt=None, n_time_steps=50000, damping=0)
-    model = pypd.Model(
-        particles,
-        bonds,
-        simulation,
-        integrator,
-        linear
-    )
+    model = pypd.Model(particles, bonds, simulation, integrator, linear)
 
     model.run_simulation()
-    model.plot_damage(sz=.5, dsf=0, fig_title="graphite-ring")
+    model.plot_damage(sz=0.5, dsf=0, fig_title="graphite-ring")
+
 
 main()

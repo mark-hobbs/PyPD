@@ -19,6 +19,7 @@ import numpy as np
 
 import pypd
 
+
 def d2xy(n, d):
     t = d
     x = y = 0
@@ -33,6 +34,7 @@ def d2xy(n, d):
         s *= 2
     return int(x), int(y)
 
+
 def rot(n, x, y, rx, ry):
     if ry == 0:
         if rx == 1:
@@ -40,6 +42,7 @@ def rot(n, x, y, rx, ry):
             y = n - 1 - y
         x, y = y, x
     return x, y
+
 
 def compute_order(points):
     return np.log(np.sqrt(len(points))) / np.log(2)
@@ -183,12 +186,12 @@ def main():
     dx = 0.5e-3
     n_div_x = np.rint(0.4 / dx).astype(int)
     n_div_y = np.rint(0.2 / dx).astype(int)
-    notch = [np.array([0 - dx, 0.1 - (dx / 2)]), 
-             np.array([0.2, 0.1 - (dx / 2)])]
+    notch = [np.array([0 - dx, 0.1 - (dx / 2)]), np.array([0.2, 0.1 - (dx / 2)])]
 
     x = build_particle_coordinates(dx, n_div_x, n_div_y)
 
     order = compute_order(x)
+
     def map_to_hilbert(point):
         return d2xy(2**order, point[0] + point[1] * 1j)
 
@@ -196,9 +199,7 @@ def main():
 
     flag, unit_vector = build_boundary_conditions(x, dx)
 
-    material = pypd.Material(
-        name="homalite", E=4.55e9, Gf=38.46, density=1230, ft=2.5
-    )
+    material = pypd.Material(name="homalite", E=4.55e9, Gf=38.46, density=1230, ft=2.5)
     integrator = pypd.EulerCromer()
     bc = pypd.BoundaryConditions(flag, unit_vector, magnitude=1e-4)
     particles = pypd.ParticleSet(x, dx, bc, material)
@@ -217,7 +218,7 @@ def main():
     )
 
     model.run_simulation()
-    model.plot_damage(fig_title='crack-branching')
+    model.plot_damage(fig_title="crack-branching")
 
 
 main()
