@@ -191,18 +191,19 @@ def main():
     x = build_particle_coordinates(dx, n_div_x, n_div_y)
 
     order = compute_order(x)
-
     def map_to_hilbert(point):
         return d2xy(2**order, point[0] + point[1] * 1j)
 
     x_sorted = np.array(sorted(x, key=map_to_hilbert))
-
-    flag, unit_vector = build_boundary_conditions(x, dx)
+    result = (x == x_sorted).all()
+    print("Equality Comparison:", result)
+    
+    flag, unit_vector = build_boundary_conditions(x_sorted, dx)
 
     material = pypd.Material(name="homalite", E=4.55e9, Gf=38.46, density=1230, ft=2.5)
     integrator = pypd.EulerCromer()
     bc = pypd.BoundaryConditions(flag, unit_vector, magnitude=1e-4)
-    particles = pypd.ParticleSet(x, dx, bc, material)
+    particles = pypd.ParticleSet(x_sorted, dx, bc, material)
     linear = pypd.Linear(material, particles, t=dx)
     bonds = pypd.BondSet(particles, linear)
     bonds.bondlist, particles.n_family_members = build_notch(
@@ -216,6 +217,8 @@ def main():
         integrator,
         linear,
     )
+
+    print(bonds.bondlist)
 
     model.run_simulation()
     model.plot_damage(fig_title="crack-branching")
